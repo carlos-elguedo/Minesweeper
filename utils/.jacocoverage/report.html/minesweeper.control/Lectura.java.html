@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Lectura.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Minesweeper&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">minesweeper.control</a> &gt; <span class="el_source">Lectura.java</span></div><h1>Lectura.java</h1><pre class="source lang-java linenums">/**
+ * Clase Lectura
+ * Esta clase sera la encargada del ingreso de datos por parte del usuario
+ */
+package minesweeper.control;
+
+import java.util.Scanner;
+
+
+/**
+ *
+ * @author Carlos Andrés Elguedo Padilla
+ * @version 1.0
+ */
+public class Lectura {
+    //Atributos de la clase
+    /*Esta variable representara el texto ingresado por el usuario*/
+    private String text_readed;
+    
+    
+    Scanner lectura;
+    /**
+     * Constructor de la clase
+     */
+<span class="nc" id="L25">    public Lectura(){</span>
+<span class="nc" id="L26">        lectura = new Scanner(System.in);</span>
+<span class="nc" id="L27">    }</span>
+    
+     
+    /**
+     * Este metodo es el encargado de recibir la entrada del usuario por consola
+     * @param text_show
+     * @return El texto leido
+     */
+    public String readInput(String text_show){
+        //Mostramos el mensaje que vera el usuario
+<span class="nc" id="L37">        System.out.print(text_show);</span>
+        
+        //Capturamos la entrada
+<span class="nc" id="L40">        this.text_readed = lectura.nextLine();</span>
+        
+        //Retornomos el texto leido
+<span class="nc" id="L43">        return this.text_readed;</span>
+    }
+    
+    
+    
+}//Fin de la clase
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

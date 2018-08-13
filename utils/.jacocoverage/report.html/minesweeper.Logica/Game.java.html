@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Game.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Minesweeper&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">minesweeper.Logica</a> &gt; <span class="el_source">Game.java</span></div><h1>Game.java</h1><pre class="source lang-java linenums">/*
+    Clase Game
+    Esta clase es la encargada la logica del juego
+*/
+package minesweeper.Logica;
+
+import java.util.ArrayList;
+import minesweeper.print.Print;
+
+/**
+ * @author Carlos Elguedo Padilla
+ * @version 1.0
+ */
+public class Game {
+    
+    //Atributos de la clase
+    //Indica el ancho del tablero
+    private final int width;
+    
+    //Indica la altura del tablero
+    private final int height;
+    
+    //Indica la cantidad de minas del tablero
+    private final int mines;
+    
+    //Indica la matriz de elementos de celdas del juego
+    private Cell[][] matrixElements;
+    
+    //Este objeto es el encargado de configurar el juego
+    private Setting setting;
+    
+    //Objeto encargado de imprimir en pantalla
+    private Print print;
+    
+    //Variable que indica el estado de vitoria del juego
+<span class="nc" id="L36">    private boolean VICTORY = false;</span>
+    
+    //Variable que indica el estado de finalizacion del juego
+<span class="nc" id="L39">    private boolean GAME_END = false;</span>
+    
+    /**
+     * Constructor de la clase
+     * @param initialInput datos que inica las configuracioens del tablero
+     */
+<span class="nc" id="L45">    public Game(ArrayList&lt;Integer&gt; initialInput){</span>
+        //Obtenemos el ancho del tablero desde los datos recibidos
+<span class="nc" id="L47">        this.width = initialInput.get(0);</span>
+        //Obtenemos la altura del tablero desde los datos recibidos
+<span class="nc" id="L49">        this.height = initialInput.get(1);</span>
+        //Obtenemos la cantidad de minas del tablero desde los datos recibidos
+<span class="nc" id="L51">        this.mines = initialInput.get(2);</span>
+        
+        //Inicializamos el objeto de configuraciones con los datos recibidos
+<span class="nc" id="L54">        setting = new Setting(width, height, mines);</span>
+        
+        //Iniciamos el objeto impresor con los datos recibidos
+<span class="nc" id="L57">        print = new Print(width, height);</span>
+        
+        //Obtenemos la matriz de juego configurada y lista para empezar el juego
+<span class="nc" id="L60">        this.matrixElements = setting.fillBoard();</span>
+        
+        //Mostramos la matriz inical del juego
+<span class="nc" id="L63">        print.printBoard(matrixElements); </span>
+<span class="nc" id="L64">    }</span>
+    
+    
+    /**
+     * Este metodo es para continuar con el proceso logico del juego
+     * Dependiendo de los datos recibidos, cambia el estado del juego
+     * @param row fila a descubrio o marcar
+     * @param col columna a descubrio o marcar
+     * @param action tipo de accion a realizar: DESCUBRIIR O MARCAR/DESMARCAR
+     */
+    public void continue_game(int row, int col, int action){
+        //Utilizamos un switch para averiguar el tipo de accion a realizar por el usuario
+<span class="nc bnc" id="L76" title="All 3 branches missed.">        switch(action){</span>
+            //Caso 1 para descubir una celda
+            case 1:
+                //Si la celda seleccionada aun no ha sido seleccionada  (su estado es false)
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                if(this.matrixElements[row][col].isState() == false){</span>
+                    //Cambiamos el estado de la celda a true, lo que indica que esta descubierta o seleccionada
+<span class="nc" id="L82">                    this.matrixElements[row][col].setState(true);</span>
+                    
+                    //Ahora, verificamos si la celda estaba marcada
+<span class="nc bnc" id="L85" title="All 2 branches missed.">                    if(this.matrixElements[row][col].isMarked() == true){</span>
+                        //Si la celda estaba marcada como bandera, le cambiamos ese estado (la desmarcamos)
+<span class="nc" id="L87">                        this.matrixElements[row][col].setMarked(false);</span>
+                    }
+                    
+                    //Game over
+                    //Si la celda descubierta contiene una mina, el juego a finalizado
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                    if(this.matrixElements[row][col].getContent().equals(&quot;*&quot;)){</span>
+                        //Indicamos que el juego ha terminado
+<span class="nc" id="L94">                        this.GAME_END = true;</span>
+                    }
+                    
+                    //Si la celda descubierta esta vacia (contenia 0 bombas a su alrededor)
+                    //Procedmos a descubrir las adyacentes
+<span class="nc bnc" id="L99" title="All 2 branches missed.">                    if(this.matrixElements[row][col].getContent().equals(&quot;0&quot;)){</span>
+                        //Cabiamos el contenido a '-' para indicar que la celda esta vacia
+<span class="nc" id="L101">                        this.matrixElements[row][col].setContent(&quot;-&quot;);</span>
+                        //Descubrimos las celdas adyacentes
+<span class="nc" id="L103">                        discoverAdjacent(row, col);</span>
+                    }
+                    
+                }
+                break;
+                
+            //Caso 1 para Marcar una celda
+            case 2:
+                //Si la celda a marcar aun no ha ha sido descubierta
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                if(this.matrixElements[row][col].isState() == false){</span>
+                    //Si la celda a marcar ya estaba marcada, se procede a desnarcar
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                    if(this.matrixElements[row][col].isMarked() == true){</span>
+                        //Se desmarca la celda
+<span class="nc" id="L116">                        this.matrixElements[row][col].setMarked(false);</span>
+                    }else{
+                        //Si la celda no estaba marcada, procedemos a marcarla
+<span class="nc" id="L119">                        this.matrixElements[row][col].setMarked(true);</span>
+                    }
+                    
+                }
+                break;
+             
+            //Para cuando se quiera continuar sin una accion correcta
+            default:
+<span class="nc" id="L127">                System.out.println(&quot;Action unrecognizable&quot;);</span>
+                break;
+                
+        }//Fin dek switch
+        
+        //Despues de procesar la accion, mostramos el tablero
+<span class="nc" id="L133">        print.printBoard(this.matrixElements);</span>
+        //Llamamos a este metodo para conocer el estado del juego
+<span class="nc" id="L135">        gameState();</span>
+        
+<span class="nc" id="L137">    }</span>
+    
+    
+    
+    /**
+     * Este metodo Es para conocer el estado del juego
+     * Dependiendo de como se encuentra la matriz de elementos, se actualizan las variables que indican el estado del juego
+     */
+    public void gameState(){
+        
+        //Estos son contadores son respectivamente para:
+        //Obtener el toral de las celdas sin descubrir
+        //Obtener el total de las celdas marcadas como banderas
+<span class="nc" id="L150">        int counterCellsUnselect = 0, counterCellsMarked = 0;</span>
+        
+        //Si el juego no ha finalizado
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        if(!this.GAME_END){</span>
+            //Realizamos un ciclo doble para recorrere la matriz y conocer el toral de celdas sin seleccionar
+<span class="nc bnc" id="L155" title="All 2 branches missed.">            for(int i = 0; i &lt; this.width; i++){</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">                for(int j = 0; j &lt; this.height; j++){</span>
+                    //Si la celda actual no ha sido descubierta/seleccionada, se suma 1 al contador respectivo
+<span class="nc bnc" id="L158" title="All 2 branches missed.">                    if(this.matrixElements[i][j].isState() == false){</span>
+<span class="nc" id="L159">                        counterCellsUnselect++;</span>
+                    }
+                }
+            }//Fin de los recorridos
+            
+            //Ahora, se comprueba si el total de las celdas sin seleccionar sea igual a el numero de minas
+<span class="nc bnc" id="L165" title="All 2 branches missed.">            if(counterCellsUnselect == this.mines){</span>
+                //Si entra en aqui, indica que el usuario tiene celdas sin descubrir iguales al numero de minas
+                //Por lo que procedemos a comprobar si estan todas marcadas
+<span class="nc bnc" id="L168" title="All 2 branches missed.">                for(int i = 0; i &lt; this.width; i++){</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">                    for(int j = 0; j &lt; this.height; j++){</span>
+                        //Si la celda actual esta marcada como bandera se aumenta el contador respectivo
+<span class="nc bnc" id="L171" title="All 2 branches missed.">                        if(this.matrixElements[i][j].isMarked()== true){</span>
+<span class="nc" id="L172">                            counterCellsMarked++;</span>
+                        }
+                    }
+                }//Fin de los recorridos
+            }
+            
+            //Despues de los anteriores pasos podemos realizar la siguiente comprobacion para saber si el juego ha finalizado
+            //Ya se ha comprobado que el numero de celdas sin marcar sea igual al numero de minas previamente
+            //Si el numero de celdas marcadas es igual al numero de minas
+<span class="nc bnc" id="L181" title="All 2 branches missed.">            if(counterCellsMarked == this.mines){</span>
+                //Actualizamos los estados del juego
+<span class="nc" id="L183">                this.VICTORY = true;</span>
+<span class="nc" id="L184">                this.GAME_END = true;</span>
+            }
+        }//Fin del if que indica que el juego ha concluido
+        
+<span class="nc" id="L188">    }</span>
+    
+    
+    
+    /**
+     * eSTE METODO ES EL ENCARGADO DE GESTIONAR LA LOGICA DE DESCUBRIR LAS CELDAS ADYAECENTES
+     * CUANDO EL USUARIO O EL ALGORITMO DESCUBRE UN '0' ('-') 
+     * @param row FILA ORIGINAL, DONDE SE DESCUBRIO UN 0
+     * @param column COLUMNA ORIGINAL DONDE SE ENCUENTRA UN 0 
+     */
+    public void discoverAdjacent(int row, int column){
+    
+        //Varibles locales al metodo, que indicaran las coordenas de una columna a revisar su contenido
+<span class="nc" id="L201">        int row_to_review = 0, column_to_review = 0;</span>
+        
+        //EMPEZAMOS A REVISAR LAS CELDAS ADYACENTES A UNA POCICION RECIBIDA
+        //Esquina superior izquierda
+<span class="nc" id="L205">        row_to_review = row - 1;</span>
+<span class="nc" id="L206">        column_to_review = column-1;</span>
+<span class="nc bnc" id="L207" title="All 4 branches missed.">        if((row_to_review &gt;= 0) &amp;&amp; (column_to_review &gt;= 0)){</span>
+<span class="nc" id="L208">            verifyCellAdjacent(row_to_review, column_to_review);</span>
+        }
+        
+        
+        //Superior medio
+<span class="nc" id="L213">        row_to_review = row-1;</span>
+<span class="nc" id="L214">        column_to_review = column;</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">        if((row_to_review &gt;= 0)){</span>
+<span class="nc" id="L216">            verifyCellAdjacent(row_to_review, column_to_review);</span>
+        }
+        
+        //Esquina superior derecha
+<span class="nc" id="L220">        row_to_review = row - 1;</span>
+<span class="nc" id="L221">        column_to_review = column + 1;</span>
+<span class="nc bnc" id="L222" title="All 4 branches missed.">        if((row_to_review &gt;= 0) &amp;&amp; (column_to_review &lt; this.height)){</span>
+<span class="nc" id="L223">            verifyCellAdjacent(row_to_review, column_to_review);</span>
+        }
+        
+        //Medio izquierdo
+<span class="nc" id="L227">        row_to_review = row;</span>
+<span class="nc" id="L228">        column_to_review = column - 1;</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">        if( (column_to_review &gt;= 0)){</span>
+<span class="nc" id="L230">            verifyCellAdjacent(row_to_review, column_to_review);</span>
+        }
+        
+        
+        //Medio derecho
+<span class="nc" id="L235">        row_to_review = row;</span>
+<span class="nc" id="L236">        column_to_review = column + 1;</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">        if( (column_to_review &lt; this.height)){</span>
+<span class="nc" id="L238">            verifyCellAdjacent(row_to_review, column_to_review);</span>
+        }
+        
+        //Esquina Inferior izquierda
+<span class="nc" id="L242">        row_to_review = row + 1;</span>
+<span class="nc" id="L243">        column_to_review = column-1;</span>
+<span class="nc bnc" id="L244" title="All 4 branches missed.">        if((row_to_review &lt; this.width) &amp;&amp; (column_to_review &gt;= 0)){</span>
+<span class="nc" id="L245">            verifyCellAdjacent(row_to_review, column_to_review);</span>
+        }
+        
+        
+        //Medio inferior
+<span class="nc" id="L250">        row_to_review = row + 1;</span>
+<span class="nc" id="L251">        column_to_review = column;</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">        if((row_to_review &lt; this.width)){</span>
+<span class="nc" id="L253">            verifyCellAdjacent(row_to_review, column_to_review);</span>
+        }
+        
+        
+        //Esquida inferior derecha
+<span class="nc" id="L258">        row_to_review = row + 1;</span>
+<span class="nc" id="L259">        column_to_review = column + 1;</span>
+<span class="nc bnc" id="L260" title="All 4 branches missed.">        if((row_to_review &lt; this.width) &amp;&amp; (column_to_review &lt; this.height)){</span>
+<span class="nc" id="L261">            verifyCellAdjacent(row_to_review, column_to_review);</span>
+        }
+    
+<span class="nc" id="L264">    }</span>
+    
+    
+    
+    /**
+     * Este metodo es encargado de verificar el contenido de una celda adyacente recibida
+     * y ejecutar acciones dependiendo de lo que haya en dicha celda adyacente
+     * @param r fila de celda adyacente
+     * @param c columna de celda adyacente
+     */
+    public void verifyCellAdjacent(int r, int c){
+        //Si la celda adyacente no contiene una mina, procedemos a descubrir su contenido y realizar acciones dependiendo de dicho contenido
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        if(!this.matrixElements[r][c].getContent().equals(&quot;*&quot;)){</span>
+            //Si la celda adyacente contiene un '0' ('-')
+<span class="nc bnc" id="L278" title="All 2 branches missed.">            if(this.matrixElements[r][c].getContent().equals(&quot;0&quot;)){</span>
+                //Se decubre la celda
+<span class="nc" id="L280">                this.matrixElements[r][c].setState(true);</span>
+<span class="nc" id="L281">                this.matrixElements[r][c].setContent(&quot;-&quot;);</span>
+                //Recursivamente se llama al metodo descubrir adyacentes para seguir con la logica del juego
+                //Esto hace que el juego fluya de manera adecuada, descubriendo celdas vacias adyacentes
+<span class="nc" id="L284">                discoverAdjacent(r, c);</span>
+            }else{
+                //Cuando la celda adyacente es un numero
+                //No es bomba ni cero
+<span class="nc bnc" id="L288" title="All 2 branches missed.">                if(this.matrixElements[r][c].isState() == false){</span>
+                    //Se decubre
+<span class="nc" id="L290">                    this.matrixElements[r][c].setState(true);</span>
+                }
+            }
+            
+        }//Fin del if que comprueba si el contenido adyacente es una bomba
+<span class="nc" id="L295">    }</span>
+    
+    
+    
+    
+    /*
+        Metodos setters y getters de la clase
+    */
+    public boolean isVICTORY() {
+<span class="nc" id="L304">        return this.VICTORY;</span>
+    }
+
+    public void setVICTORY(boolean VICTORY) {
+<span class="nc" id="L308">        this.VICTORY = VICTORY;</span>
+<span class="nc" id="L309">    }</span>
+
+    public boolean isGAME_END() {
+<span class="nc" id="L312">        return this.GAME_END;</span>
+    }
+
+    public void setGAME_END(boolean GAME_END) {
+<span class="nc" id="L316">        this.GAME_END = GAME_END;</span>
+<span class="nc" id="L317">    }</span>
+    
+    
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

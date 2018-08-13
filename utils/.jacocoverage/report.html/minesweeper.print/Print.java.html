@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Print.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Minesweeper&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">minesweeper.print</a> &gt; <span class="el_source">Print.java</span></div><h1>Print.java</h1><pre class="source lang-java linenums">/*
+ * clase Print
+ * Esta clase es para mostrar en pantalla la matriz del buscaminas
+ */
+package minesweeper.print;
+
+import minesweeper.Logica.Cell;
+
+/**
+ *
+ * @author Carlos Andrés Elguedo Padilla
+ */
+public class Print {
+
+    //Atributos de la clse
+    private int rows;
+    private int columns;
+    
+    /**
+     * Este constructor recube el tamaño del tablero
+     * @param rows
+     * @param columns 
+     */
+<span class="nc" id="L24">    public Print(int rows, int columns) {</span>
+<span class="nc" id="L25">        this.columns = columns;</span>
+<span class="nc" id="L26">        this.rows = rows;</span>
+<span class="nc" id="L27">    }</span>
+    
+    
+    /**
+     * Metodo encargado de imprimir la matriz del juego
+     * @param matrixElements elementos a imprimir
+     */
+    public void printBoard(Cell[][] matrixElements){
+        
+        //Mostramos lineas en blanco para limpiar la pantalla
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        for (int i = 0; i &lt; 50; i++) {</span>
+<span class="nc" id="L38">            System.out.println(&quot;&quot;);</span>
+        }
+        
+        //Realizamos este ciclo repetitivo para mostrar todos los elementos de la matriz
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        for(int i = 0; i &lt; this.rows; i++){</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">            for(int j = 0;j &lt; this.columns; j++){</span>
+                //Si la celda actual esta sin descubrir y no ha sido marcada
+<span class="nc bnc" id="L45" title="All 4 branches missed.">                if(matrixElements[i][j].isState() == false &amp;&amp; matrixElements[i][j].isMarked() == false){</span>
+                    //La mostramos
+<span class="nc" id="L47">                    System.out.print(&quot;. &quot;);</span>
+                }
+                
+                //Si la celda actual ha sido descubierta
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                if(matrixElements[i][j].isState() == true){</span>
+                    //Mostramos su contenido y un espacio separador
+<span class="nc" id="L53">                    System.out.print(matrixElements[i][j].getContent() + &quot; &quot;);</span>
+                }
+                
+                //Si la celda actual ha sido marcada
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                if(matrixElements[i][j].isMarked()){</span>
+                    //Mostramos la bandera
+<span class="nc" id="L59">                    System.out.print(&quot;P &quot;);</span>
+                }
+                
+            }
+            //Separar las filas
+<span class="nc" id="L64">            System.out.println(&quot;&quot;);</span>
+        }//Fin de los recorridos
+        //Linea separadora final
+<span class="nc" id="L67">        System.out.println(&quot;&quot;);</span>
+<span class="nc" id="L68">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

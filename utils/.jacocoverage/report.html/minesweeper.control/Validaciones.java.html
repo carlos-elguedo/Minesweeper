@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Validaciones.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Minesweeper&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">minesweeper.control</a> &gt; <span class="el_source">Validaciones.java</span></div><h1>Validaciones.java</h1><pre class="source lang-java linenums">/**
+ * Clase Validaciones
+ * Esta clase es la encargada de hacer las comprobaciones necesarias a los datos ingresados por el usuario
+ * aqui se verificara la validez de cada dato ingresado por el usuario
+ */
+package minesweeper.control;
+
+import java.util.ArrayList;
+
+
+
+/**
+ *
+ * @author Carlos Andrés Elguedo Padilla
+ * @version 1.0
+ */
+public class Validaciones{
+    
+    //Atributos de la clase
+    
+    /*En esta variable se almacenara el texto total que fue ingresado por el usuario*/
+    private String text_to_verify;
+    
+    //Se almacena estas variables desde la validacion de la entrada inicial, para ser usadas para futuras comprobaciones
+    //Filas del cuadro de juego,
+    private int filas;
+    //Columnas del cuadro de juegpo
+    private int rows;
+
+    
+    /**
+     * Constructor de la clase
+     */
+<span class="fc" id="L34">    public Validaciones(){</span>
+        //Inicializamos las variables locales
+<span class="fc" id="L36">        this.text_to_verify = &quot;&quot;;</span>
+<span class="fc" id="L37">        this.filas = 0;</span>
+<span class="fc" id="L38">        this.rows = 0;</span>
+<span class="fc" id="L39">    }</span>
+    
+    
+    /**
+     * Este metodo es para verificar la entrada inicial
+     * @param text cadena a verificar
+     * @return Un arrayList con los datos comprobados, si lo retorno vacio, indica que la entrada es incorrecta
+     */
+    public ArrayList&lt;Integer&gt; validateInitialEntry(String text){
+        //Esta variable indicará el estado de la comprobacion para ralizar validaciones propias de la funcion
+<span class="fc" id="L49">        boolean incorrect = false;</span>
+        
+        //Argumentos iniciales para el juego
+        //Este arrayList es donde se almacenaran los datos del usuarios para ser retornados
+<span class="fc" id="L53">        ArrayList&lt;Integer&gt; data = new ArrayList&lt;Integer&gt;();</span>
+        
+        //Estas variables indican la entrada inicial del usuario en tipo de datos 'enteros'
+<span class="fc" id="L56">        int n1 = 0, n2 = 0, n3 = 0;</span>
+        
+        //Se copia el valor recibido al atributo local
+<span class="fc" id="L59">        this.text_to_verify = text;</span>
+        
+        //Obtenemos un array de la entrada inicial para realizar comprobaciones
+<span class="fc" id="L62">        String[] initialInput = text_to_verify.split(&quot; &quot;);</span>
+        
+        //Primero, comprobamos que la entrada este en formato de datos correctos (3 datos separados por UN espacio)
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if(initialInput.length == 3){</span>
+            //Segundo, se verifican que las entradas iniciales sean numeros y no letras
+            //A el metodo que verifica que sean numeros, se le pasa como atributo el texto a verificar:
+<span class="pc bpc" id="L68" title="3 of 6 branches missed.">            if (isCorrectNumber(initialInput[0]) &amp;&amp; isCorrectNumber(initialInput[1]) &amp;&amp; isCorrectNumber(initialInput[2])){</span>
+                
+                //NO HAY NECESIDAD DE COLOCAR TRY CATCH, DEBIDO A QUE EN LA INSTRUCCION ANTERIOR SE UTILIZO
+                //Le asignamos el valor correspondiente a las variables enteras
+<span class="fc" id="L72">                n1 = Integer.parseInt(initialInput[0]);</span>
+<span class="fc" id="L73">                n2 = Integer.parseInt(initialInput[1]);</span>
+<span class="fc" id="L74">                n3 = Integer.parseInt(initialInput[2]);</span>
+                
+                
+                //Validaciones iniciales para el tablero
+                
+                //Cuando alguas de las medidas es muy pequeña
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">                if(n1 * n2 &lt; 4){</span>
+<span class="nc" id="L81">                    entryNotValid(4);</span>
+<span class="nc" id="L82">                    incorrect = true;</span>
+                }
+                
+                //Si el numero de minas supera la cantidad de celdas existentes
+<span class="pc bpc" id="L86" title="3 of 4 branches missed.">                if(n3 &gt;= (n1 * n2) &amp;&amp; incorrect == false){</span>
+<span class="nc" id="L87">                    entryNotValid(3);</span>
+<span class="nc" id="L88">                    incorrect = true;</span>
+                }
+                
+                //Cuandpo no hay minas
+<span class="pc bpc" id="L92" title="3 of 4 branches missed.">                if(n3 == 0 &amp;&amp; incorrect == false){</span>
+<span class="nc" id="L93">                    entryNotValid(5);</span>
+<span class="nc" id="L94">                    incorrect = true;</span>
+                }
+                
+                
+                //Si despues de las comprobaciones anteriores, 'incorrecto' es falso, indica que la entrada inical fue correcta
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">                if(incorrect == false){</span>
+                    //Añadimos los datos al arrayList de retorno
+<span class="fc" id="L101">                    data.add(n1);</span>
+<span class="fc" id="L102">                    data.add(n2);</span>
+<span class="fc" id="L103">                    data.add(n3);</span>
+                    
+                    //Aignamos a las varibles locales, los datos recibidos
+<span class="fc" id="L106">                    this.filas = n1;</span>
+<span class="fc" id="L107">                    this.rows = n2;</span>
+                }
+                
+            }//Fin del if que comprueba que los datos ingresados sean numeros
+        }else{
+            //El texto no esta en formato correcto
+<span class="nc" id="L113">            entryNotValid(1);</span>
+        }
+        
+        //Retornomos el arrayList de retorno, vacio o lleno, deacuerdo a las comprobaciones realizadas anteriormente
+<span class="fc" id="L117">        return data;</span>
+    }
+    
+    
+    /**
+     * Este metodo es para verificar que la entrada de un turno sea correcta
+     * @param text texto a verificar
+     * @return Un arrayList con los datos comprobados, si lo retorno vacio, indica que la entrada es incorrecta
+     */
+    public ArrayList&lt;Integer&gt; RoundInputIsCorrect(String text){
+        //Variable que indica el estado de la comprobacion
+<span class="fc" id="L128">        boolean correct = false;</span>
+        
+        ////Este arrayList es donde se almacenaran los datos del usuarios para ser retornados
+<span class="fc" id="L131">        ArrayList&lt;Integer&gt; data = new ArrayList&lt;Integer&gt;();</span>
+        
+        //Estas variables indican la entrada inicial del usuario en tipo de datos 'enteros'
+<span class="fc" id="L134">        int n1 = 0, n2 = 0, n3 = 0;</span>
+        
+        //Se copia el valor recibido al atributo local
+<span class="fc" id="L137">        this.text_to_verify = text;</span>
+        
+        //Obtenemos un array de la entrada inicial para realizar comprobaciones
+<span class="fc" id="L140">        String[] input = this.text_to_verify.split(&quot; &quot;);</span>
+        
+        //Primero, comprobamos que la entrada este en formato de datos correctos (3 datos separados por UN espacio)
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">        if(input.length == 3){</span>
+            //Segundo, se verifican que las entradas iniciales sean numeros y no letras
+            //A el metodo que verifica que sean numeros, se le pasa como atributo el texto a verificar:
+<span class="pc bpc" id="L146" title="2 of 4 branches missed.">            if (isCorrectNumber(input[0]) &amp;&amp; isCorrectNumber(input[1])){</span>
+                
+                //NO HAY NECESIDAD DE COLOCAR TRY CATCH, DEBIDO A QUE EN LA INSTRUCCION ANTERIOR SE UTILIZO
+                //Le asignamos el valor correspondiente a las variables enteras
+<span class="fc" id="L150">                n1 = Integer.parseInt(input[0]);</span>
+<span class="fc" id="L151">                n2 = Integer.parseInt(input[1]);</span>
+                
+                //VEEIFICAMOS QUE LOS NUMEROS INGRESADOS SEAN CORRECTOS
+                //Se verifican que los dos primeros numeros sean menores a la cantidad de filas y rows existentes
+<span class="pc bpc" id="L155" title="3 of 4 branches missed.">                if(n1 &gt;= this.filas || n2 &gt;= this.rows){</span>
+<span class="fc" id="L156">                    entryNotValid(6);</span>
+                }else{
+                    //Ahora, se verifica que haya ingreado un texto de accion correcto
+                    //Para cuando va a descubrir una celda
+<span class="nc bnc" id="L160" title="All 4 branches missed.">                    if(input[2].equals(&quot;u&quot;) || input[2].equals(&quot;U&quot;)){</span>
+                        //La variable entera 'n3' indica el tipo de accion de arealizar: 1 INDICA DESCUBRIR
+<span class="nc" id="L162">                        n3 = 1;</span>
+                        //La entrada es correcta
+<span class="nc" id="L164">                        correct = true;</span>
+                    }
+
+                    //Para cuando va a marcar una celda
+<span class="nc bnc" id="L168" title="All 4 branches missed.">                    if(input[2].equals(&quot;m&quot;) || input[2].equals(&quot;M&quot;)){</span>
+                        //La variable entera 'n3' indica el tipo de accion de arealizar: 2 INDICA MARCAR COMO BANDERA
+<span class="nc" id="L170">                        n3 = 2;</span>
+                        //La entrada es correcta
+<span class="nc" id="L172">                        correct = true;</span>
+                    }
+                }//Fin del else de compruba que la entrada no sea mayor a las dimensiones del cuadro de juego
+                
+            }//Fin del if que verifica que los dos datos ingresados sean numeros
+            
+        }//Fin del if que comprueba el formato correcto de los datos
+        
+        //Si despues de las validaciones acteriores 'correct' es true, indica que la entrada fue correcta
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        if(correct){</span>
+            //Añadimos los datos al arrayList de retorno
+<span class="nc" id="L183">            data.add(n1);</span>
+<span class="nc" id="L184">            data.add(n2);</span>
+<span class="nc" id="L185">            data.add(n3);</span>
+        }
+        
+        //Retornomos el arrayList de retorno, vacio o lleno, deacuerdo a las comprobaciones realizadas anteriormente
+<span class="fc" id="L189">        return data;</span>
+    }//Fin del metodo
+    
+    
+    
+    
+    
+    /**
+     * Esta funcion es para comprobar si una parte del texto ingresado por el usuario es del formato correcto (Numerico)
+     * Se entiende por parte, uno de los lados divididos por la ',' de la entrada del texto ingresado por el usuario
+     * @param cadena text_to_verify de texto que se va a verificar
+     * @return verdadero si el texto recibido es numerico y o esta dentro del rango
+     */
+    public boolean isCorrectNumber(String text){
+        /*Variable futura del valor de retorno*/
+<span class="fc" id="L204">        boolean return_data = false;</span>
+        
+        /*
+        Debido a que la text_to_verify de digitos puede ser muy larga, sobrepasando la capacidad de los tipos de datos comunes, se realiza lo siguiente:
+        Se convierte la text_to_verify a un Arreglo, separando cada caracter individualmente
+        Se comprobara si cada caracter es un numero
+        Esto nos garantizara la aceptacion de expresiones con digitos muy largos.
+        */
+        /*Obtenemos un array de todos los elementos del texto*/
+<span class="fc" id="L213">        String[] elements = text.split(&quot;&quot;);</span>
+        
+        //Realizamos un ciclo para comprobar los elementos de la text_to_verify recibida, si encontramos un elemento no numerico, terminamos el ciclo inmediatamaente
+<span class="fc bfc" id="L216" title="All 2 branches covered.">        for(int i = 0; i&lt;elements.length; i++){</span>
+            //Realizamos un procedimiento para hacer la conversión los elementos de la text_to_verify a numericos (Integer)
+            try {
+                //Se convierte cada elemento, pero no es necesario almacenarlo
+<span class="fc" id="L220">                Integer.parseInt(elements[i]);</span>
+                //Si la comprobacion fue satisfactoria, indica que ese elemento es numerico, y podemos pasar al siguiente
+<span class="fc" id="L222">                return_data = true;</span>
+<span class="nc" id="L223">            } catch (NumberFormatException ex) {</span>
+                //Si ocurre al gun error en la conversion a numericos de la text_to_verify recibida, quiere decir la text_to_verify no es numerica
+<span class="nc" id="L225">                return_data = false;</span>
+                //Mostramos un texto en consola que indique lo sucedido
+<span class="nc" id="L227">                entryNotValid(2);</span>
+                //Terminamos el ciclo inmediatamente
+<span class="nc" id="L229">                break;</span>
+<span class="fc" id="L230">            }</span>
+        }//Fin del for que recorre todos los elementos de la text_to_verify
+        
+        //Retornamos un valor indicando el resultado de los procedimientos de esta funcion
+<span class="fc" id="L234">        return return_data;</span>
+    
+    }//Fin de la funcion isCorrectNumber
+    
+    
+    /**
+     * Esate metodo es para imprimir en pantalla que un texto ingresado no es valido, indicando el tipo de error cometico
+     * 1 para cuando el texto no esta en formato correcto
+     * 2 para cuando el texto no pudo se procesado por contener caracteres no numericos
+     * 3 para cuando la cantidad de minas no puede ser admitidas
+     * 4 para cuando el tablero es muy pequeño
+     * 5 No ha ingresados minas para colocar
+     * 6 Las coordenadas de una celda ingresada superan el tamaño del tablero
+     * defaul para cuando el texto tiene error de formato diferente
+     * @param error_type indica que tipo de error se va a mostrar en pantalla
+     */
+    public void entryNotValid(int error_type){
+        //Se analiz el parametro recibido para mostrar el mensaje especificado correctamente
+<span class="pc bpc" id="L252" title="5 of 7 branches missed.">        switch(error_type){</span>
+            
+            //La entrada inicial no esta en formato separadas por &quot; &quot;
+            case 1:
+<span class="nc" id="L256">                System.err.println(&quot;Por favor verifica la entrada inicial formato: 'fil' 'col' 'min'&quot;);</span>
+<span class="nc" id="L257">                break;</span>
+            
+            
+            //Para cuando la text_to_verify ingresada contiene caracteres diferentes a los digitos
+            case 2:
+<span class="nc" id="L262">                System.err.println(&quot;El texto contiene caracteres distintos a los digitos&quot;);</span>
+<span class="nc" id="L263">                break;</span>
+                
+            
+            //Para cuando la primera parte de la text_to_verify supera no esta en rango entre 1 y 10
+            case 3:
+                //Cuando el numero de minas supera las celdas existentes
+<span class="nc" id="L269">                System.err.println(&quot;No se puede crear esa cantidad de minas&quot;);</span>
+                
+<span class="nc" id="L271">                break;</span>
+                
+            
+            //Para cuando el tablero es muy pequeño
+            case 4:
+<span class="nc" id="L276">                System.err.println(&quot;El tablero es muy pequeño (minimo: 2x2)&quot;);</span>
+<span class="nc" id="L277">                break;</span>
+                
+                
+            case 5:
+<span class="nc" id="L281">                System.err.println(&quot;No hay minas que colocar&quot;);</span>
+<span class="nc" id="L282">                break;</span>
+            
+            case 6:
+<span class="fc" id="L285">                System.err.println(&quot;La coordenada ingresada supera el limite del tablero&quot;);</span>
+<span class="fc" id="L286">                break;</span>
+            
+                
+            //Para cuando la variable recibida no ingreso a ninguno de los casos anteriores
+            default:
+<span class="fc" id="L291">                System.err.println(&quot;No se puede procesar el texto ingresado&quot;);</span>
+                break;
+            
+        }//Fin del switch
+        
+<span class="fc" id="L296">    }//Fin de la funcion entryNotValid, la cual muestra en consola el tipo de error</span>
+    
+    
+    
+    
+    
+    /**
+     * Metodos Getters y Setters de la clase
+     */
+    
+    public String getText_to_verify() {
+<span class="nc" id="L307">        return text_to_verify;</span>
+    }
+
+    public void setText_to_verify(String text_to_verify) {
+<span class="nc" id="L311">        this.text_to_verify = text_to_verify;</span>
+<span class="nc" id="L312">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

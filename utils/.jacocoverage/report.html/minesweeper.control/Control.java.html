@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Control.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Minesweeper&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">minesweeper.control</a> &gt; <span class="el_source">Control.java</span></div><h1>Control.java</h1><pre class="source lang-java linenums">/*
+    Clase Control
+    Esta clase es la encargada de gestionar y controlar el flujo del programa
+*/
+package minesweeper.control;
+
+import java.util.ArrayList;
+import minesweeper.Logica.Game;
+
+/**
+ *
+ * @author Carlos Andrés Elguedo Padilla
+ * @version 1.0
+ */
+public class Control {
+    
+    //Atributos de la clase
+    /*Este objeto es sera el encargado de obtener los datos ingresados por el usuario*/
+    private Lectura reader_data;
+    
+    /*Este objeto estara encargado de realizar las validaciones a los datos ingresados por el usuario*/
+    private Validaciones validator;
+    
+    //Este pnjeto es el encargado de los procesos logicos del juegos
+    private Game game;
+    
+    /*
+        Contructor de la clase
+        Dentro del contructor, instanciamos los objetos necesarios para los procesos de la clase
+    */
+<span class="nc" id="L31">    public Control(){</span>
+<span class="nc" id="L32">        reader_data = new Lectura();</span>
+<span class="nc" id="L33">        validator = new Validaciones();</span>
+<span class="nc" id="L34">    }</span>
+    
+    
+    
+    /**
+     * Este metodo da inicio al programa, es el encargado de controlar el flujo desde el inicio al fin del programa, 
+     */
+    public void startingProgram() {
+        //Este arrayList de enteros, indicara la entraad inicial del usuario
+        //La entrada inicial del usuario debe estar en formato 'width' 'heigth' 'mines'
+        //Por ejemplo: 8 15 10
+        ArrayList&lt;Integer&gt; INPUT_INITIAL;
+        
+        //Este arrayList de enteros, indicará los datos de coordenadas y la accion que quiere realizar el usuario en un turno
+        ArrayList&lt;Integer&gt; INPUT_ROUND;
+        
+        //Variable que representa el texto inicial ingresado, el cual sera validado
+<span class="nc" id="L51">        String text_initial = &quot;&quot;;</span>
+        
+        //Variable que representa el texto ingresado en un turno, el cual sera validado
+<span class="nc" id="L54">        String inputRound = &quot;&quot;;</span>
+        
+        
+        //Capturamos la entrada del usuario mientras que la entrada no este en formato correcto
+        //La entrada inicial tiene que estar en formato correcto para poder continue_game
+        do{
+            //Capturamos el texto ingresado por el usuario
+<span class="nc" id="L61">            text_initial = reader_data.readInput(&quot;Initial input:&quot;);</span>
+            
+            //Validamos la entrada inicial
+            //Quitamos los espacios en blancos al fnal e inicio de la cadena, antes de comprobarla
+<span class="nc" id="L65">            INPUT_INITIAL = validator.validateInitialEntry(text_initial.trim());</span>
+            
+            //Comprobamos la condicion del ciclo para seguir o repetir
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        }while(INPUT_INITIAL.size() != 3);</span>
+        
+        //comandos.clearConsole();
+        
+        //Como ya tenemos los datos iniciales correctos, ponemos crear el juego
+<span class="nc" id="L73">        game = new Game(INPUT_INITIAL);</span>
+        
+        //Para controlar el flujo del programa utilizaremos un ciclo while para repetir el siguiente proceso
+        //El ciclo termina hasta que el juego haya terminado, haya perdido o ganado el usuario
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        while(game.isGAME_END() == false){</span>
+            
+            //Utilizaremos este ciclo do while para recibir y validar las entradas del usuarios
+            //Este ciclo se repite hasta que la entrada este en formato correcto
+            do{
+                //Se reciben los datos ingresados por el usuario en un turno
+<span class="nc" id="L83">                inputRound = reader_data.readInput(&quot;Round input:&quot;);</span>
+                
+                //Se validan los datos recibidos por el usuario
+<span class="nc" id="L86">                INPUT_ROUND = validator.RoundInputIsCorrect(inputRound);</span>
+                
+                //Comprobamos la condicion del ciclo para seguir o repetir
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            }while(INPUT_ROUND.size() != 3);</span>
+            
+            //Continuamos con la entradas ingresadas por el usuario, enviandola al objeto juego, para que en su logica las procese
+<span class="nc" id="L92">            game.continue_game(INPUT_ROUND.get(0), INPUT_ROUND.get(1), INPUT_ROUND.get(2));</span>
+            
+        }//Fin del while controlador del flujo del programa
+        
+        //Cuando haya salido del ciclo anterior, el programa ha finalizado, por lo que hay que averiguar si el usuario gano o perdio
+        //Si la propiedad VICTORY del objeto game, es true, indica que el usuario ha ganado el juego
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if(game.isVICTORY()){</span>
+<span class="nc" id="L99">            System.out.println(&quot;Felicidades, haz ganado&quot;);</span>
+        }else{
+            //En caso contrario, indica que el juego ha terminado con derrota
+<span class="nc" id="L102">            System.out.println(&quot;Ups, intentalo de nuevo&quot;);</span>
+        }
+        
+        
+        
+<span class="nc" id="L107">    }//Fin del metodo iniciar programa</span>
+
+    
+    /**
+     * 
+     * GETTERS Y SETTERS
+     */
+    
+    public Lectura getReader_data() {
+<span class="nc" id="L116">        return reader_data;</span>
+    }
+
+    public void setReader_data(Lectura reader_data) {
+<span class="nc" id="L120">        this.reader_data = reader_data;</span>
+<span class="nc" id="L121">    }</span>
+
+    public Validaciones getValidator() {
+<span class="nc" id="L124">        return validator;</span>
+    }
+
+    public void setValidator(Validaciones validator) {
+<span class="nc" id="L128">        this.validator = validator;</span>
+<span class="nc" id="L129">    }</span>
+
+    
+    
+    
+}//Fin de la clase
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
